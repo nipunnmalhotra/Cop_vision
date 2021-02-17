@@ -1,0 +1,142 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+<head>
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="">
+  <meta name="generator" content="Jekyll v3.8.5">
+  <title>CopVision</title>
+
+
+  <!-- Bootstrap core CSS -->
+  <link href="https://fonts.googleapis.com/css?family=Poppins:100,200,400,300,500,600,700" rel="stylesheet">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <link rel="stylesheet" href="{% static 'homepage/css/base.css' %}">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css?family=Poppins:200,300,400,500,600,700,800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Lora:400,400i,700,700i&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Amatic+SC:400,700&display=swap" rel="stylesheet">
+  <style>
+  a { color: #94041c; } /* CSS link color */
+  .bd-placeholder-img {
+    font-size: 1.125rem;
+    text-anchor: middle;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+  }
+
+  @media (min-width: 768px) {
+    .bd-placeholder-img-lg {
+      font-size: 3.5rem;
+    }
+  }
+  </style>
+  <!-- Custom styles for this template -->
+</head>
+<body style="background-color:white;">
+  <div class="bg">
+    <header>
+      <nav class="navbar navbar-expand-lg navbar-dark fixed-top p-3 mb-5 bg-dark">
+
+        <a class="navbar-brand" href="{% url 'home' %}">
+          <img src="{% static 'logo1.png' %}" width="30" height="30" class="d-inline-block align-top hovernow" style="border-radius:50%;" alt="">
+          <span class="title-custom">CopVision</span>
+        </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+        {% block navitems %}
+        <ul class="navbar-nav ml-auto">
+          <li><a class="nav-item nav-link" href="{% url 'blog' %}">Official Blog</a></li>
+          {% if user.is_authenticated and perms.app.change_challan %}
+          <li><a class="nav-item nav-link" href="{% url 'review' %}">Review</a></li>
+          <li><a class="nav-item nav-link" href="{% url 'approved' %}">Approved</a></li>
+          <li><a class="nav-item nav-link" href="{% url 'bin' %}">Bin</a></li>
+          <li><a class="nav-item nav-link" href="{% url 'profile' %}">My Profile</a></li>
+          <li><a class="nav-item nav-link" href="javascript:{document.getElementById('logout').submit()}" onclick="">Logout <strong>{{user.username}}</strong></a></li>
+          {% elif user.is_authenticated and perms.app.change_upload %}
+            <li><a class="nav-item nav-link" href="#">My Profile</a></li>
+            <li><a class="nav-item nav-link" href="javascript:{document.getElementById('logout').submit()}" onclick="">Logout <strong>{{user.username}}</strong></a></li>
+          {% endif %}
+        </ul>
+        <form class="" id="logout" action="{% url 'logout' %}" method="post">
+          {% csrf_token %}
+          <input type="hidden"  value="">
+        </form>
+        {% endblock navitems %}
+          </nav>
+      </div>
+    </header>
+    <div class="container mx-auto " style="padding-bottom:100px;">
+      {% block content %}
+      {% if error %}
+      <div class="alert alert-danger" role="alert">
+        {{error.text}}
+      </div>
+      {% endif %}
+      
+      <h1>Upload Video</h1>
+
+      <form method="POST" action="{% url 'vid_upload' %}" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="form-group">
+          Video Description:
+          <br>
+          <input type="text" name="title" value="">
+        </div>
+        <div class="form-group">
+          Enter number of Frames:
+          <br>
+          <input type="number" name="frames" value="">
+        </div>
+        <div class="form-group">
+          Video:
+          <br>
+      <input type="file" name="video" />
+        </div>
+        <input type="submit" name="submit" value="Start Processing">
+      </form>
+      <hr>
+ 
+
+
+      {% endblock content %}
+    </div>
+  </div>
+    <footer class="footer fixed-bottom">
+
+
+    <div class="container">
+
+      <div class="row">
+          <div class="mouse">
+            <a href="#" class="mouse-icon">
+              <div class="mouse-wheel"><span class="ion-ios-arrow-up"></span>
+              </div>
+            </a>
+          </div>
+        </div>
+        <br> <br>
+      <div class="row">
+        <div class="col-md-12 text-center">
+          <p>
+            Copyright &copy;<script>document.write(new Date().getFullYear());</script> | Made with &#10084;&#65039; by <a href="{% url 'aboutus' %}" target="_blank">The Copvision Team</a>
+          </p>
+        </div>
+      </div>
+    </div>
+  </footer>
+<script type="text/javascript" src="{% static 'homepage/js/base.js' %}"></script>
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBVWaKrjvy3MaE7SQ74_uJiULgl1JY0H2s&sensor=false"></script>
+</body>
+</html>
